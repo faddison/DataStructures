@@ -22,5 +22,21 @@ namespace Graphs.BST
         {
             Key = key;
         }
+
+        public bool HasLeft
+        {
+            get
+            {
+                return Left != null;
+            }
+        }
+
+        public bool HasRight
+        {
+            get
+            {
+                return Right != null;
+            }
+        }
     }
 }

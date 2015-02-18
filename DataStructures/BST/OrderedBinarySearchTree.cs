@@ -25,14 +25,14 @@ namespace Graphs.BST
         {
             if (node.Key <= Root.Key)
             {
-                if (Root.Left == null)
+                if (!Root.HasLeft)
                     Root.Left = node;
                 else
                     Insert(Root.Left, node);
             }
             else
             {
-                if (Root.Right == null)
+                if (!Root.HasRight)
                     Root.Right = node;
                 else
                     Insert(Root.Right, node);
@@ -43,14 +43,14 @@ namespace Graphs.BST
         {
             if (node.Key <= parent.Key)
             {
-                if (parent.Left == null)
+                if (!parent.HasLeft)
                     parent.Left = node;
                 else
                     Insert(parent.Left, node);
             }
             else
             {
-                if (parent.Right == null)
+                if (!parent.HasRight)
                     parent.Right = node;
                 else
                     Insert(parent.Right, node);
@@ -62,9 +62,25 @@ namespace Graphs.BST
             throw new System.NotImplementedException();
         }
 
-        public BinaryTreeNode Find(BinaryTreeNode node)
+        public BinaryTreeNode Find(int key)
         {
             throw new System.NotImplementedException();
+        }
+
+        public int Count()
+        {
+            return CountHelper(Root);
+        }
+
+        private int CountHelper(BinaryTreeNode node)
+        {
+            if (!node.HasLeft)
+                if (!node.HasRight)
+                    return 0;
+                else
+                    return CountHelper(node.Right) + 1;
+            else
+                return CountHelper(node.Left) + 1;
         }
     }
 }

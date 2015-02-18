@@ -17,7 +17,7 @@ namespace Graphs.BST
         BinaryTreeNode Root { get; }
         void Insert(BinaryTreeNode node);
         void Delete(BinaryTreeNode node);
-        BinaryTreeNode Find(BinaryTreeNode node);
+        BinaryTreeNode Find(int key);
 
     }
 }
