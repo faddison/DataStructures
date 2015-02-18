@@ -15,8 +15,8 @@ namespace Graphs.BST
     public interface IBinarySearchTree
     {
         BinaryTreeNode Root { get; }
-        void Insert(BinaryTreeNode node);
-        void Delete(BinaryTreeNode node);
+        bool Insert(BinaryTreeNode node);
+        bool Delete(int key);
         BinaryTreeNode Find(int key);
 
     }

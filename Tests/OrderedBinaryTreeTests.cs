@@ -10,328 +10,812 @@ namespace Tests
     [TestFixture]
     class OrderedBinaryTreeTests
     {
-        private OrderedBinarySearchTree tree { get; set; }
+        private OrderedBinarySearchTree Tree { get; set; }
 
         [SetUp]
         public void SetUp()
         {
-            tree = new OrderedBinarySearchTree(new BinaryTreeNode(5));
+            Tree = new OrderedBinarySearchTree(new BinaryTreeNode(5));
         }
 
         [Test]
         public void ConstructorTest_CreateNewOrderedBinaryTree()
         {
-            Assert.AreEqual(5, tree.Root.Key);
-            Assert.IsNull(tree.Root.Left);
-            Assert.IsNull(tree.Root.Right);
+            Assert.AreEqual(5, Tree.Root.Key);
+            Assert.IsNull(Tree.Root.Left);
+            Assert.IsNull(Tree.Root.Right);
         }
+
+        #region Insert
 
         [Test]
         public void InsertTest_InsertSingle_LessThanRoot()
         {
-            tree.Insert(new BinaryTreeNode(4));
-            Assert.AreEqual(4, tree.Root.Left.Key);
+            Tree.Insert(new BinaryTreeNode(4));
+            Assert.AreEqual(4, Tree.Root.Left.Key);
         }
 
         [Test]
-        public void InsertTest_InsertSingle_EqualToRoot()
+        public void InsertTest_InsertSingleDuplicate_EqualToRoot()
         {
-            tree.Insert(new BinaryTreeNode(5));
-            Assert.AreEqual(5, tree.Root.Left.Key);
+            Assert.IsFalse(Tree.Insert(new BinaryTreeNode(5)));
+            Assert.IsNull(Tree.Root.Left);
         }
 
         [Test]
         public void InsertTest_InsertSingle_GreaterThanRoot()
         {
-            tree.Insert(new BinaryTreeNode(6));
-            Assert.AreEqual(6, tree.Root.Right.Key);
+            Tree.Insert(new BinaryTreeNode(6));
+            Assert.AreEqual(6, Tree.Root.Right.Key);
         }
 
         [Test]
         public void InsertTest_InsertTwo_GreaterAndLessThanRoot()
         {
-            tree.Insert(new BinaryTreeNode(4));
-            tree.Insert(new BinaryTreeNode(6));
-            Assert.AreEqual(4, tree.Root.Left.Key);
-            Assert.AreEqual(6, tree.Root.Right.Key);
+            Tree.Insert(new BinaryTreeNode(4));
+            Tree.Insert(new BinaryTreeNode(6));
+            Assert.AreEqual(4, Tree.Root.Left.Key);
+            Assert.AreEqual(6, Tree.Root.Right.Key);
         }
 
         [Test]
         public void InsertTest_InsertTwo_GreaterAndLessThanRoot_InReverseOrder()
         {
-            tree.Insert(new BinaryTreeNode(6));
-            tree.Insert(new BinaryTreeNode(4));
-            Assert.AreEqual(4, tree.Root.Left.Key);
-            Assert.AreEqual(6, tree.Root.Right.Key);
+            Tree.Insert(new BinaryTreeNode(6));
+            Tree.Insert(new BinaryTreeNode(4));
+            Assert.AreEqual(4, Tree.Root.Left.Key);
+            Assert.AreEqual(6, Tree.Root.Right.Key);
+        }
+
+        [Test]
+        public void InsertTest_InsertTwo_GreaterAndLessThanRoot_LastIsDuplicate()
+        {
+            Assert.IsTrue(Tree.Insert(new BinaryTreeNode(4)));
+            Assert.IsTrue(Tree.Insert(new BinaryTreeNode(6)));
+            Assert.IsFalse(Tree.Insert(new BinaryTreeNode(6)));
+            Assert.AreEqual(4, Tree.Root.Left.Key);
+            Assert.AreEqual(6, Tree.Root.Right.Key);
+            Assert.IsNull(Tree.Root.Right.Right);
+            Assert.IsNull(Tree.Root.Right.Left);
+
+        }
+
+        [Test]
+        public void InsertTest_InsertTwo_GreaterAndLessThanRoot_InReverseOrder_LastIsDuplicate()
+        {
+            Assert.IsTrue(Tree.Insert(new BinaryTreeNode(6)));
+            Assert.IsTrue(Tree.Insert(new BinaryTreeNode(4)));
+            Assert.IsFalse(Tree.Insert(new BinaryTreeNode(4)));
+            Assert.AreEqual(4, Tree.Root.Left.Key);
+            Assert.AreEqual(6, Tree.Root.Right.Key);
+            Assert.IsNull(Tree.Root.Left.Left);
+            Assert.IsNull(Tree.Root.Left.Right);
         }
 
         [Test]
         public void InsertTest_InsertTwo_BothLessThanRoot_SecondGreaterThanFirst()
         {
-            tree.Insert(new BinaryTreeNode(3));
-            tree.Insert(new BinaryTreeNode(4));
-            Assert.AreEqual(3, tree.Root.Left.Key);
-            Assert.AreEqual(4, tree.Root.Left.Right.Key);
+            Tree.Insert(new BinaryTreeNode(3));
+            Tree.Insert(new BinaryTreeNode(4));
+            Assert.AreEqual(3, Tree.Root.Left.Key);
+            Assert.AreEqual(4, Tree.Root.Left.Right.Key);
         }
 
         [Test]
         public void InsertTest_InsertTwo_BothLessThanRoot_FirstGreaterThanSecond()
         {
-            tree.Insert(new BinaryTreeNode(4));
-            tree.Insert(new BinaryTreeNode(3));
-            Assert.AreEqual(4, tree.Root.Left.Key);
-            Assert.AreEqual(3, tree.Root.Left.Left.Key);
+            Tree.Insert(new BinaryTreeNode(4));
+            Tree.Insert(new BinaryTreeNode(3));
+            Assert.AreEqual(4, Tree.Root.Left.Key);
+            Assert.AreEqual(3, Tree.Root.Left.Left.Key);
         }
 
         [Test]
         public void InsertTest_InsertTwo_BothgreaterThanRoot_FirstGreaterThanSecond()
         {
-            tree.Insert(new BinaryTreeNode(7));
-            tree.Insert(new BinaryTreeNode(6));
-            Assert.AreEqual(7, tree.Root.Right.Key);
-            Assert.AreEqual(6, tree.Root.Right.Left.Key);
+            Tree.Insert(new BinaryTreeNode(7));
+            Tree.Insert(new BinaryTreeNode(6));
+            Assert.AreEqual(7, Tree.Root.Right.Key);
+            Assert.AreEqual(6, Tree.Root.Right.Left.Key);
         }
 
         [Test]
         public void InsertTest_InsertTwo_BothgreaterThanRoot_SecondGreaterThanFirst()
         {
-            tree.Insert(new BinaryTreeNode(6));
-            tree.Insert(new BinaryTreeNode(7));
-            Assert.AreEqual(6, tree.Root.Right.Key);
-            Assert.AreEqual(7, tree.Root.Right.Right.Key);
+            Tree.Insert(new BinaryTreeNode(6));
+            Tree.Insert(new BinaryTreeNode(7));
+            Assert.AreEqual(6, Tree.Root.Right.Key);
+            Assert.AreEqual(7, Tree.Root.Right.Right.Key);
         }
 
         [Test]
         public void InsertTest_InsertThree_LeftLeftLeft()
         {
-            tree.Insert(new BinaryTreeNode(4));
-            tree.Insert(new BinaryTreeNode(3));
-            tree.Insert(new BinaryTreeNode(2));
-            Assert.AreEqual(4, tree.Root.Left.Key);
-            Assert.AreEqual(3, tree.Root.Left.Left.Key);
-            Assert.AreEqual(2, tree.Root.Left.Left.Left.Key);
+            Tree.Insert(new BinaryTreeNode(4));
+            Tree.Insert(new BinaryTreeNode(3));
+            Tree.Insert(new BinaryTreeNode(2));
+            Assert.AreEqual(4, Tree.Root.Left.Key);
+            Assert.AreEqual(3, Tree.Root.Left.Left.Key);
+            Assert.AreEqual(2, Tree.Root.Left.Left.Left.Key);
         }
 
         [Test]
         public void InsertTest_InsertThree_LeftLeftRight()
         {
-            tree.Insert(new BinaryTreeNode(4));
-            tree.Insert(new BinaryTreeNode(2));
-            tree.Insert(new BinaryTreeNode(3));
-            Assert.AreEqual(4, tree.Root.Left.Key);
-            Assert.AreEqual(2, tree.Root.Left.Left.Key);
-            Assert.AreEqual(3, tree.Root.Left.Left.Right.Key);
+            Tree.Insert(new BinaryTreeNode(4));
+            Tree.Insert(new BinaryTreeNode(2));
+            Tree.Insert(new BinaryTreeNode(3));
+            Assert.AreEqual(4, Tree.Root.Left.Key);
+            Assert.AreEqual(2, Tree.Root.Left.Left.Key);
+            Assert.AreEqual(3, Tree.Root.Left.Left.Right.Key);
         }
 
         [Test]
         public void InsertTest_InsertThree_LeftRightLeft()
         {
-            tree.Insert(new BinaryTreeNode(2));
-            tree.Insert(new BinaryTreeNode(4));
-            tree.Insert(new BinaryTreeNode(3));
-            Assert.AreEqual(2, tree.Root.Left.Key);
-            Assert.AreEqual(4, tree.Root.Left.Right.Key);
-            Assert.AreEqual(3, tree.Root.Left.Right.Left.Key);
+            Tree.Insert(new BinaryTreeNode(2));
+            Tree.Insert(new BinaryTreeNode(4));
+            Tree.Insert(new BinaryTreeNode(3));
+            Assert.AreEqual(2, Tree.Root.Left.Key);
+            Assert.AreEqual(4, Tree.Root.Left.Right.Key);
+            Assert.AreEqual(3, Tree.Root.Left.Right.Left.Key);
         }
 
         [Test]
         public void InsertTest_InsertThree_LeftRightRight()
         {
-            tree.Insert(new BinaryTreeNode(2));
-            tree.Insert(new BinaryTreeNode(3));
-            tree.Insert(new BinaryTreeNode(4));
-            Assert.AreEqual(2, tree.Root.Left.Key);
-            Assert.AreEqual(3, tree.Root.Left.Right.Key);
-            Assert.AreEqual(4, tree.Root.Left.Right.Right.Key);
+            Tree.Insert(new BinaryTreeNode(2));
+            Tree.Insert(new BinaryTreeNode(3));
+            Tree.Insert(new BinaryTreeNode(4));
+            Assert.AreEqual(2, Tree.Root.Left.Key);
+            Assert.AreEqual(3, Tree.Root.Left.Right.Key);
+            Assert.AreEqual(4, Tree.Root.Left.Right.Right.Key);
         }
 
         [Test]
         public void InsertTest_InsertThree_RightRightRight()
         {
-            tree.Insert(new BinaryTreeNode(6));
-            tree.Insert(new BinaryTreeNode(7));
-            tree.Insert(new BinaryTreeNode(8));
-            Assert.AreEqual(6, tree.Root.Right.Key);
-            Assert.AreEqual(7, tree.Root.Right.Right.Key);
-            Assert.AreEqual(8, tree.Root.Right.Right.Right.Key);
+            Tree.Insert(new BinaryTreeNode(6));
+            Tree.Insert(new BinaryTreeNode(7));
+            Tree.Insert(new BinaryTreeNode(8));
+            Assert.AreEqual(6, Tree.Root.Right.Key);
+            Assert.AreEqual(7, Tree.Root.Right.Right.Key);
+            Assert.AreEqual(8, Tree.Root.Right.Right.Right.Key);
         }
 
         [Test]
         public void InsertTest_InsertThree_RightRightLeft()
         {
-            tree.Insert(new BinaryTreeNode(6));
-            tree.Insert(new BinaryTreeNode(8));
-            tree.Insert(new BinaryTreeNode(7));
-            Assert.AreEqual(6, tree.Root.Right.Key);
-            Assert.AreEqual(8, tree.Root.Right.Right.Key);
-            Assert.AreEqual(7, tree.Root.Right.Right.Left.Key);
+            Tree.Insert(new BinaryTreeNode(6));
+            Tree.Insert(new BinaryTreeNode(8));
+            Tree.Insert(new BinaryTreeNode(7));
+            Assert.AreEqual(6, Tree.Root.Right.Key);
+            Assert.AreEqual(8, Tree.Root.Right.Right.Key);
+            Assert.AreEqual(7, Tree.Root.Right.Right.Left.Key);
         }
 
         [Test]
         public void InsertTest_InsertThree_RightLeftRight()
         {
-            tree.Insert(new BinaryTreeNode(8));
-            tree.Insert(new BinaryTreeNode(6));
-            tree.Insert(new BinaryTreeNode(7));
-            Assert.AreEqual(8, tree.Root.Right.Key);
-            Assert.AreEqual(6, tree.Root.Right.Left.Key);
-            Assert.AreEqual(7, tree.Root.Right.Left.Right.Key);
+            Tree.Insert(new BinaryTreeNode(8));
+            Tree.Insert(new BinaryTreeNode(6));
+            Tree.Insert(new BinaryTreeNode(7));
+            Assert.AreEqual(8, Tree.Root.Right.Key);
+            Assert.AreEqual(6, Tree.Root.Right.Left.Key);
+            Assert.AreEqual(7, Tree.Root.Right.Left.Right.Key);
         }
 
         [Test]
         public void InsertTest_InsertThree_RightLeftLeft()
         {
-            tree.Insert(new BinaryTreeNode(8));
-            tree.Insert(new BinaryTreeNode(7));
-            tree.Insert(new BinaryTreeNode(6));
-            Assert.AreEqual(8, tree.Root.Right.Key);
-            Assert.AreEqual(7, tree.Root.Right.Left.Key);
-            Assert.AreEqual(6, tree.Root.Right.Left.Left.Key);
+            Tree.Insert(new BinaryTreeNode(8));
+            Tree.Insert(new BinaryTreeNode(7));
+            Tree.Insert(new BinaryTreeNode(6));
+            Assert.AreEqual(8, Tree.Root.Right.Key);
+            Assert.AreEqual(7, Tree.Root.Right.Left.Key);
+            Assert.AreEqual(6, Tree.Root.Right.Left.Left.Key);
         }
+
+        #endregion
+
+        #region Count
 
         [Test]
         public void CountTest_InsertThree_LeftLeftLeft()
         {
-            tree.Insert(new BinaryTreeNode(4));
-            tree.Insert(new BinaryTreeNode(3));
-            tree.Insert(new BinaryTreeNode(2));
-            Assert.AreEqual(3, tree.Count());
+            Tree.Insert(new BinaryTreeNode(4));
+            Tree.Insert(new BinaryTreeNode(3));
+            Tree.Insert(new BinaryTreeNode(2));
+            Assert.AreEqual(3, Tree.Count());
         }
 
         [Test]
         public void CountTest_InsertThree_LeftLeftRight()
         {
-            tree.Insert(new BinaryTreeNode(4));
-            tree.Insert(new BinaryTreeNode(2));
-            tree.Insert(new BinaryTreeNode(3));
-            Assert.AreEqual(3, tree.Count());
+            Tree.Insert(new BinaryTreeNode(4));
+            Tree.Insert(new BinaryTreeNode(2));
+            Tree.Insert(new BinaryTreeNode(3));
+            Assert.AreEqual(3, Tree.Count());
         }
 
         [Test]
         public void CountTest_InsertThree_LeftRightLeft()
         {
-            tree.Insert(new BinaryTreeNode(2));
-            tree.Insert(new BinaryTreeNode(4));
-            tree.Insert(new BinaryTreeNode(3));
-            Assert.AreEqual(3, tree.Count());
+            Tree.Insert(new BinaryTreeNode(2));
+            Tree.Insert(new BinaryTreeNode(4));
+            Tree.Insert(new BinaryTreeNode(3));
+            Assert.AreEqual(3, Tree.Count());
         }
 
         [Test]
         public void CountTest_InsertThree_LeftRightRight()
         {
-            tree.Insert(new BinaryTreeNode(2));
-            tree.Insert(new BinaryTreeNode(3));
-            tree.Insert(new BinaryTreeNode(4));
-            Assert.AreEqual(3, tree.Count());
+            Tree.Insert(new BinaryTreeNode(2));
+            Tree.Insert(new BinaryTreeNode(3));
+            Tree.Insert(new BinaryTreeNode(4));
+            Assert.AreEqual(3, Tree.Count());
         }
 
         [Test]
         public void CountTest_InsertThree_RightRightRight()
         {
-            tree.Insert(new BinaryTreeNode(6));
-            tree.Insert(new BinaryTreeNode(7));
-            tree.Insert(new BinaryTreeNode(8));
-            Assert.AreEqual(3, tree.Count());
+            Tree.Insert(new BinaryTreeNode(6));
+            Tree.Insert(new BinaryTreeNode(7));
+            Tree.Insert(new BinaryTreeNode(8));
+            Assert.AreEqual(3, Tree.Count());
         }
 
         [Test]
         public void CountTest_InsertThree_RightRightLeft()
         {
-            tree.Insert(new BinaryTreeNode(6));
-            tree.Insert(new BinaryTreeNode(8));
-            tree.Insert(new BinaryTreeNode(7));
-            Assert.AreEqual(3, tree.Count());
+            Tree.Insert(new BinaryTreeNode(6));
+            Tree.Insert(new BinaryTreeNode(8));
+            Tree.Insert(new BinaryTreeNode(7));
+            Assert.AreEqual(3, Tree.Count());
         }
 
         [Test]
         public void CountTest_InsertThree_RightLeftRight()
         {
-            tree.Insert(new BinaryTreeNode(8));
-            tree.Insert(new BinaryTreeNode(6));
-            tree.Insert(new BinaryTreeNode(7));
-            Assert.AreEqual(3, tree.Count());
+            Tree.Insert(new BinaryTreeNode(8));
+            Tree.Insert(new BinaryTreeNode(6));
+            Tree.Insert(new BinaryTreeNode(7));
+            Assert.AreEqual(3, Tree.Count());
         }
 
         [Test]
         public void CountTest_InsertThree_RightLeftLeft()
         {
-            tree.Insert(new BinaryTreeNode(8));
-            tree.Insert(new BinaryTreeNode(7));
-            tree.Insert(new BinaryTreeNode(6));
-            Assert.AreEqual(3, tree.Count());
-        }
-
-
-        [Test]
-        public void FindTest_InsertThree_LeftLeftLeft()
-        {
-            tree.Insert(new BinaryTreeNode(4));
-            tree.Insert(new BinaryTreeNode(3));
-            tree.Insert(new BinaryTreeNode(2));
-            Assert.IsNotNull(tree.Find(2));
+            Tree.Insert(new BinaryTreeNode(8));
+            Tree.Insert(new BinaryTreeNode(7));
+            Tree.Insert(new BinaryTreeNode(6));
+            Assert.AreEqual(3, Tree.Count());
         }
 
         [Test]
-        public void FindTest_InsertThree_LeftLeftRight()
+        public void CountTest_Is5_5Inserts()
         {
-            tree.Insert(new BinaryTreeNode(4));
-            tree.Insert(new BinaryTreeNode(2));
-            tree.Insert(new BinaryTreeNode(3));
-            Assert.IsNotNull(tree.Find(3));
+            Tree.Insert(new BinaryTreeNode(3));
+            Tree.Insert(new BinaryTreeNode(7));
+            Tree.Insert(new BinaryTreeNode(2));
+            Tree.Insert(new BinaryTreeNode(4));
+            Tree.Insert(new BinaryTreeNode(6));
+            Assert.AreEqual(5, Tree.Count());
         }
 
         [Test]
-        public void FindTest_InsertThree_LeftRightLeft()
+        public void CountTest_Is6_6Inserts()
         {
-            tree.Insert(new BinaryTreeNode(2));
-            tree.Insert(new BinaryTreeNode(4));
-            tree.Insert(new BinaryTreeNode(3));
-            Assert.IsNotNull(tree.Find(3));
+            Tree.Insert(new BinaryTreeNode(3));
+            Tree.Insert(new BinaryTreeNode(7));
+            Tree.Insert(new BinaryTreeNode(2));
+            Tree.Insert(new BinaryTreeNode(4));
+            Tree.Insert(new BinaryTreeNode(6));
+            Tree.Insert(new BinaryTreeNode(8));
+            Assert.AreEqual(6, Tree.Count());
         }
 
         [Test]
-        public void FindTest_InsertThree_LeftRightRight()
+        public void CountTest_Is7_RightHeavy()
         {
-            tree.Insert(new BinaryTreeNode(2));
-            tree.Insert(new BinaryTreeNode(3));
-            tree.Insert(new BinaryTreeNode(4));
-            Assert.IsNotNull(tree.Find(4));
+            Tree.Insert(new BinaryTreeNode(3));
+            Tree.Insert(new BinaryTreeNode(4));
+            Tree.Insert(new BinaryTreeNode(6));
+            Tree.Insert(new BinaryTreeNode(7));
+            Tree.Insert(new BinaryTreeNode(8));
+            Tree.Insert(new BinaryTreeNode(9));
+            Tree.Insert(new BinaryTreeNode(10));
+            Assert.AreEqual(7, Tree.Count());
         }
 
         [Test]
-        public void FindTest_InsertThree_RightRightRight()
+        public void CountTest_Is6_RightLeftWings()
         {
-            tree.Insert(new BinaryTreeNode(6));
-            tree.Insert(new BinaryTreeNode(7));
-            tree.Insert(new BinaryTreeNode(8));
-            Assert.IsNotNull(tree.Find(8));
+            Tree.Insert(new BinaryTreeNode(3));
+            Tree.Insert(new BinaryTreeNode(2));
+            Tree.Insert(new BinaryTreeNode(1));
+            Tree.Insert(new BinaryTreeNode(7));
+            Tree.Insert(new BinaryTreeNode(8));
+            Tree.Insert(new BinaryTreeNode(9));
+            Assert.AreEqual(6, Tree.Count());
         }
 
         [Test]
-        public void FindTest_InsertThree_RightRightLeft()
+        public void CountTest_Is8_LeftInnerWing()
         {
-            tree.Insert(new BinaryTreeNode(6));
-            tree.Insert(new BinaryTreeNode(8));
-            tree.Insert(new BinaryTreeNode(7));
-            Assert.IsNotNull(tree.Find(7));
+            Tree.Insert(new BinaryTreeNode(0));
+            Tree.Insert(new BinaryTreeNode(-11));
+            Tree.Insert(new BinaryTreeNode(-12));
+            Tree.Insert(new BinaryTreeNode(-10));
+            Tree.Insert(new BinaryTreeNode(-9));
+            Tree.Insert(new BinaryTreeNode(-8));
+            Tree.Insert(new BinaryTreeNode(-7));
+            Tree.Insert(new BinaryTreeNode(-6));
+            Assert.AreEqual(8, Tree.Count());
         }
 
         [Test]
-        public void FindTest_InsertThree_RightLeftRight()
+        public void CountTest_Is8_SpreadEagle()
         {
-            tree.Insert(new BinaryTreeNode(8));
-            tree.Insert(new BinaryTreeNode(6));
-            tree.Insert(new BinaryTreeNode(7));
-            Assert.IsNotNull(tree.Find(7));
+            Tree.Insert(new BinaryTreeNode(4));
+            Tree.Insert(new BinaryTreeNode(6));
+            Tree.Insert(new BinaryTreeNode(3));
+            Tree.Insert(new BinaryTreeNode(7));
+            Tree.Insert(new BinaryTreeNode(2));
+            Tree.Insert(new BinaryTreeNode(8));
+            Tree.Insert(new BinaryTreeNode(1));
+            Tree.Insert(new BinaryTreeNode(9));
+            Assert.AreEqual(8, Tree.Count());
         }
 
         [Test]
-        public void FindTest_InsertThree_RightLeftLeft()
+        public void CountTest_Is10_LongAndLanky()
         {
-            tree.Insert(new BinaryTreeNode(8));
-            tree.Insert(new BinaryTreeNode(7));
-            tree.Insert(new BinaryTreeNode(6));
-            Assert.IsNotNull(tree.Find(6));
+            Tree.Insert(new BinaryTreeNode(-20));
+            Tree.Insert(new BinaryTreeNode(20));
+            Tree.Insert(new BinaryTreeNode(-15));
+            Tree.Insert(new BinaryTreeNode(10));
+            Tree.Insert(new BinaryTreeNode(-10));
+            Tree.Insert(new BinaryTreeNode(15));
+            Tree.Insert(new BinaryTreeNode(-12));
+            Tree.Insert(new BinaryTreeNode(12));
+            Tree.Insert(new BinaryTreeNode(-11));
+            Tree.Insert(new BinaryTreeNode(13));
+            Assert.AreEqual(10, Tree.Count());
         }
+
+#endregion
+
+        #region Find
+
+        [Test]
+        public void FindTest_InsertNone_IsNull()
+        {
+            Assert.IsNull(Tree.Find(4));
+        }
+
+        [Test]
+        public void FindTest_InsertNone_IsNotNull()
+        {
+            Assert.IsNotNull(Tree.Find(5));
+        }
+
+        #region Last Node Not Null
+
+        [Test]
+        public void FindTest_InsertThree_LeftLeftLeft_IsNotNull()
+        {
+            Tree.Insert(new BinaryTreeNode(4));
+            Tree.Insert(new BinaryTreeNode(3));
+            Tree.Insert(new BinaryTreeNode(2));
+            Assert.IsNotNull(Tree.Find(2));
+        }
+
+        [Test]
+        public void FindTest_InsertThree_LeftLeftRight_IsNotNull()
+        {
+            Tree.Insert(new BinaryTreeNode(4));
+            Tree.Insert(new BinaryTreeNode(2));
+            Tree.Insert(new BinaryTreeNode(3));
+            Assert.IsNotNull(Tree.Find(3));
+        }
+
+        [Test]
+        public void FindTest_InsertThree_LeftRightLeft_IsNotNull()
+        {
+            Tree.Insert(new BinaryTreeNode(2));
+            Tree.Insert(new BinaryTreeNode(4));
+            Tree.Insert(new BinaryTreeNode(3));
+            Assert.IsNotNull(Tree.Find(3));
+        }
+
+        [Test]
+        public void FindTest_InsertThree_LeftRightRight_IsNotNull()
+        {
+            Tree.Insert(new BinaryTreeNode(2));
+            Tree.Insert(new BinaryTreeNode(3));
+            Tree.Insert(new BinaryTreeNode(4));
+            Assert.IsNotNull(Tree.Find(4));
+        }
+
+        [Test]
+        public void FindTest_InsertThree_RightRightRight_IsNotNull()
+        {
+            Tree.Insert(new BinaryTreeNode(6));
+            Tree.Insert(new BinaryTreeNode(7));
+            Tree.Insert(new BinaryTreeNode(8));
+            Assert.IsNotNull(Tree.Find(8));
+        }
+
+        [Test]
+        public void FindTest_InsertThree_RightRightLeft_IsNotNull()
+        {
+            Tree.Insert(new BinaryTreeNode(6));
+            Tree.Insert(new BinaryTreeNode(8));
+            Tree.Insert(new BinaryTreeNode(7));
+            Assert.IsNotNull(Tree.Find(7));
+        }
+
+        [Test]
+        public void FindTest_InsertThree_RightLeftRight_IsNotNull()
+        {
+            Tree.Insert(new BinaryTreeNode(8));
+            Tree.Insert(new BinaryTreeNode(6));
+            Tree.Insert(new BinaryTreeNode(7));
+            Assert.IsNotNull(Tree.Find(7));
+        }
+
+        [Test]
+        public void FindTest_InsertThree_RightLeftLeft_IsNotNull()
+        {
+            Tree.Insert(new BinaryTreeNode(8));
+            Tree.Insert(new BinaryTreeNode(7));
+            Tree.Insert(new BinaryTreeNode(6));
+            Assert.IsNotNull(Tree.Find(6));
+        }
+
+        #endregion
+
+        #region Middle Node Not Null
+
+        [Test]
+        public void FindTest_InsertThree_LeftLeftLeft_IsNotNull_MiddleNode()
+        {
+            Tree.Insert(new BinaryTreeNode(4));
+            Tree.Insert(new BinaryTreeNode(3));
+            Tree.Insert(new BinaryTreeNode(2));
+            Assert.IsNotNull(Tree.Find(3));
+        }
+
+        [Test]
+        public void FindTest_InsertThree_LeftLeftRight_IsNotNull_MiddleNode()
+        {
+            Tree.Insert(new BinaryTreeNode(4));
+            Tree.Insert(new BinaryTreeNode(2));
+            Tree.Insert(new BinaryTreeNode(3));
+            Assert.IsNotNull(Tree.Find(2));
+        }
+
+        [Test]
+        public void FindTest_InsertThree_LeftRightLeft_IsNotNull_MiddleNode()
+        {
+            Tree.Insert(new BinaryTreeNode(2));
+            Tree.Insert(new BinaryTreeNode(4));
+            Tree.Insert(new BinaryTreeNode(3));
+            Assert.IsNotNull(Tree.Find(4));
+        }
+
+        [Test]
+        public void FindTest_InsertThree_LeftRightRight_IsNotNull_MiddleNode()
+        {
+            Tree.Insert(new BinaryTreeNode(2));
+            Tree.Insert(new BinaryTreeNode(3));
+            Tree.Insert(new BinaryTreeNode(4));
+            Assert.IsNotNull(Tree.Find(3));
+        }
+
+        [Test]
+        public void FindTest_InsertThree_RightRightRight_IsNotNull_MiddleNode()
+        {
+            Tree.Insert(new BinaryTreeNode(6));
+            Tree.Insert(new BinaryTreeNode(7));
+            Tree.Insert(new BinaryTreeNode(8));
+            Assert.IsNotNull(Tree.Find(7));
+        }
+
+        [Test]
+        public void FindTest_InsertThree_RightRightLeft_IsNotNull_MiddleNode()
+        {
+            Tree.Insert(new BinaryTreeNode(6));
+            Tree.Insert(new BinaryTreeNode(8));
+            Tree.Insert(new BinaryTreeNode(7));
+            Assert.IsNotNull(Tree.Find(8));
+        }
+
+        [Test]
+        public void FindTest_InsertThree_RightLeftRight_IsNotNull_MiddleNode()
+        {
+            Tree.Insert(new BinaryTreeNode(8));
+            Tree.Insert(new BinaryTreeNode(6));
+            Tree.Insert(new BinaryTreeNode(7));
+            Assert.IsNotNull(Tree.Find(6));
+        }
+
+        [Test]
+        public void FindTest_InsertThree_RightLeftLeft_IsNotNull_MiddleNode()
+        {
+            Tree.Insert(new BinaryTreeNode(8));
+            Tree.Insert(new BinaryTreeNode(7));
+            Tree.Insert(new BinaryTreeNode(6));
+            Assert.IsNotNull(Tree.Find(7));
+        }
+
+        #endregion
+
+        #region End Node Is Null
+
+        [Test]
+        public void FindTest_InsertThree_LeftLeftRight_IsNull()
+        {
+            Tree.Insert(new BinaryTreeNode(4));
+            Tree.Insert(new BinaryTreeNode(2));
+            Tree.Insert(new BinaryTreeNode(3));
+            Assert.IsNull(Tree.Find(99));
+        }
+
+        [Test]
+        public void FindTest_InsertThree_LeftRightLeft_IsNull()
+        {
+            Tree.Insert(new BinaryTreeNode(2));
+            Tree.Insert(new BinaryTreeNode(4));
+            Tree.Insert(new BinaryTreeNode(3));
+            Assert.IsNull(Tree.Find(99));
+        }
+
+        [Test]
+        public void FindTest_InsertThree_LeftRightRight_IsNull()
+        {
+            Tree.Insert(new BinaryTreeNode(2));
+            Tree.Insert(new BinaryTreeNode(3));
+            Tree.Insert(new BinaryTreeNode(4));
+            Assert.IsNull(Tree.Find(99));
+        }
+
+        [Test]
+        public void FindTest_InsertThree_RightRightRight_IsNull()
+        {
+            Tree.Insert(new BinaryTreeNode(6));
+            Tree.Insert(new BinaryTreeNode(7));
+            Tree.Insert(new BinaryTreeNode(8));
+            Assert.IsNull(Tree.Find(99));
+        }
+
+        [Test]
+        public void FindTest_InsertThree_RightRightLeft_IsNull()
+        {
+            Tree.Insert(new BinaryTreeNode(6));
+            Tree.Insert(new BinaryTreeNode(8));
+            Tree.Insert(new BinaryTreeNode(7));
+            Assert.IsNull(Tree.Find(99));
+        }
+
+        [Test]
+        public void FindTest_InsertThree_RightLeftRight_IsNull()
+        {
+            Tree.Insert(new BinaryTreeNode(8));
+            Tree.Insert(new BinaryTreeNode(6));
+            Tree.Insert(new BinaryTreeNode(7));
+            Assert.IsNull(Tree.Find(99));
+        }
+
+        [Test]
+        public void FindTest_InsertThree_RightLeftLeft_IsNull()
+        {
+            Tree.Insert(new BinaryTreeNode(8));
+            Tree.Insert(new BinaryTreeNode(7));
+            Tree.Insert(new BinaryTreeNode(6));
+            Assert.IsNull(Tree.Find(99));
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Depth
+
+        [Test]
+        public void DepthTest_Is0_0Inserts()
+        {
+            Assert.AreEqual(0, Tree.Depth());
+        }
+
+        [Test]
+        public void DepthTest_Is1_1Insert()
+        {
+            Tree.Insert(new BinaryTreeNode(4));
+            Assert.AreEqual(1, Tree.Depth());
+        }
+
+        [Test]
+        public void DepthTest_Is1_2Inserts()
+        {
+            Tree.Insert(new BinaryTreeNode(4));
+            Tree.Insert(new BinaryTreeNode(6));
+            Assert.AreEqual(1, Tree.Depth());
+        }
+
+        [Test]
+        public void DepthTest_Is2_2Inserts()
+        {
+            Tree.Insert(new BinaryTreeNode(4));
+            Tree.Insert(new BinaryTreeNode(3));
+            Assert.AreEqual(2, Tree.Depth());
+        }
+
+        [Test]
+        public void DepthTest_Is2_3Inserts()
+        {
+            Tree.Insert(new BinaryTreeNode(4));
+            Tree.Insert(new BinaryTreeNode(6));
+            Tree.Insert(new BinaryTreeNode(3));
+            Assert.AreEqual(2, Tree.Depth());
+        }
+
+        [Test]
+        public void DepthTest_Is2_4Inserts()
+        {
+            Tree.Insert(new BinaryTreeNode(3));
+            Tree.Insert(new BinaryTreeNode(7));
+            Tree.Insert(new BinaryTreeNode(2));
+            Tree.Insert(new BinaryTreeNode(4));
+            Assert.AreEqual(2, Tree.Depth());
+        }
+
+        [Test]
+        public void DepthTest_Is2_5Inserts()
+        {
+            Tree.Insert(new BinaryTreeNode(3));
+            Tree.Insert(new BinaryTreeNode(7));
+            Tree.Insert(new BinaryTreeNode(2));
+            Tree.Insert(new BinaryTreeNode(4));
+            Tree.Insert(new BinaryTreeNode(6));
+            Assert.AreEqual(2, Tree.Depth());
+        }
+
+        [Test]
+        public void DepthTest_Is2_6Inserts()
+        {
+            Tree.Insert(new BinaryTreeNode(3));
+            Tree.Insert(new BinaryTreeNode(7));
+            Tree.Insert(new BinaryTreeNode(2));
+            Tree.Insert(new BinaryTreeNode(4));
+            Tree.Insert(new BinaryTreeNode(6));
+            Tree.Insert(new BinaryTreeNode(8));
+            Assert.AreEqual(2, Tree.Depth());
+        }
+
+        [Test]
+        public void DepthTest_Is5_RightHeavy()
+        {
+            Tree.Insert(new BinaryTreeNode(3));
+            Tree.Insert(new BinaryTreeNode(4));
+            Tree.Insert(new BinaryTreeNode(6));
+            Tree.Insert(new BinaryTreeNode(7));
+            Tree.Insert(new BinaryTreeNode(8));
+            Tree.Insert(new BinaryTreeNode(9));
+            Tree.Insert(new BinaryTreeNode(10));
+            Assert.AreEqual(5, Tree.Depth());
+        }
+
+        [Test]
+        public void DepthTest_Is5_RightLeftWings()
+        {
+            Tree.Insert(new BinaryTreeNode(3));
+            Tree.Insert(new BinaryTreeNode(2));
+            Tree.Insert(new BinaryTreeNode(1));
+            Tree.Insert(new BinaryTreeNode(7));
+            Tree.Insert(new BinaryTreeNode(8));
+            Tree.Insert(new BinaryTreeNode(9));
+            Assert.AreEqual(3, Tree.Depth());
+        }
+
+        [Test]
+        public void DepthTest_Is5_LeftInnerWing()
+        {
+            Tree.Insert(new BinaryTreeNode(0));
+            Tree.Insert(new BinaryTreeNode(-11));
+            Tree.Insert(new BinaryTreeNode(-12));
+            Tree.Insert(new BinaryTreeNode(-10));
+            Tree.Insert(new BinaryTreeNode(-9));
+            Tree.Insert(new BinaryTreeNode(-8));
+            Tree.Insert(new BinaryTreeNode(-7));
+            Tree.Insert(new BinaryTreeNode(-6));
+            Assert.AreEqual(7, Tree.Depth());
+        }
+
+        [Test]
+        public void DepthTest_Is4_SpreadEagle()
+        {
+            Tree.Insert(new BinaryTreeNode(4));
+            Tree.Insert(new BinaryTreeNode(6));
+            Tree.Insert(new BinaryTreeNode(3));
+            Tree.Insert(new BinaryTreeNode(7));
+            Tree.Insert(new BinaryTreeNode(2));
+            Tree.Insert(new BinaryTreeNode(8));
+            Tree.Insert(new BinaryTreeNode(1));
+            Tree.Insert(new BinaryTreeNode(9));
+            Assert.AreEqual(4, Tree.Depth());
+        }
+
+        [Test]
+        public void DepthTest_Is5_LongAndLanky()
+        {
+            Tree.Insert(new BinaryTreeNode(-20));
+            Tree.Insert(new BinaryTreeNode(20));
+            Tree.Insert(new BinaryTreeNode(-15));
+            Tree.Insert(new BinaryTreeNode(10));
+            Tree.Insert(new BinaryTreeNode(-10));
+            Tree.Insert(new BinaryTreeNode(15));
+            Tree.Insert(new BinaryTreeNode(-12));
+            Tree.Insert(new BinaryTreeNode(12));
+            Tree.Insert(new BinaryTreeNode(-11));
+            Tree.Insert(new BinaryTreeNode(13));
+            Assert.AreEqual(5, Tree.Depth());
+        }
+
+        #endregion
+
+        #region Delete
+
+        [Test]
+        public void DeleteTest()
+        {
+            Assert.Catch<Exception>(()=>Tree.Delete(5));
+            Assert.AreEqual(5, Tree.Root.Key);
+        }
+
+        [Test]
+        public void DeleteTest_RootLeft()
+        {
+            Tree.Insert(new BinaryTreeNode(4));
+            Assert.AreEqual(4, Tree.Root.Left.Key);
+            Assert.True(Tree.Delete(4));
+            Assert.IsNull(Tree.Root.Left);
+        }
+
+        [Test]
+        public void DeleteTest_RootRight()
+        {
+            Tree.Insert(new BinaryTreeNode(6));
+            Assert.AreEqual(6, Tree.Root.Right.Key);
+            Assert.True(Tree.Delete(6));
+            Assert.IsNull(Tree.Root.Right);
+        }
+
+        [Test]
+        public void DeleteTest_RootLeftLeft()
+        {
+            Tree.Insert(new BinaryTreeNode(4));
+            Tree.Insert(new BinaryTreeNode(3));
+            Assert.AreEqual(4, Tree.Root.Left.Key);
+            Assert.AreEqual(3, Tree.Root.Left.Left.Key);
+            Assert.True(Tree.Delete(4));
+            Assert.IsNull(Tree.Root.Left.Left);
+            Assert.AreEqual(3, Tree.Root.Left.Key);
+        }
+
+        [Test]
+        public void DeleteTest_RootRightRight()
+        {
+            Tree.Insert(new BinaryTreeNode(6));
+            Tree.Insert(new BinaryTreeNode(7));
+            Assert.AreEqual(6, Tree.Root.Right.Key);
+            Assert.AreEqual(7, Tree.Root.Right.Right.Key);
+            Assert.True(Tree.Delete(6));
+            Assert.IsNull(Tree.Root.Right.Right);
+            Assert.AreEqual(7, Tree.Root.Right.Key);
+        }
+
+        #endregion
     }
 }

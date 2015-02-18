@@ -38,5 +38,21 @@ namespace Graphs.BST
                 return Right != null;
             }
         }
+
+        public bool HasGrandchildren
+        {
+            get
+            {
+                return ((HasRight && (Right.HasLeft || Right.HasLeft)) || (HasLeft && (Left.HasLeft || Left.HasRight)));
+            }
+        }
+
+        public bool HasChildren
+        {
+            get
+            {
+                return (HasRight || HasLeft);
+            }
+        }
     }
 }
