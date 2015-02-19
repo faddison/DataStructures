@@ -821,6 +821,7 @@ namespace Tests
         #region Print
 
         [Test]
+        [Ignore]
         public void PrintTest()
         {
             Tree.Insert(new BinaryTreeNode(-20));
@@ -846,6 +847,12 @@ namespace Tests
             Tree.Insert(new BinaryTreeNode(6));
             Tree.Insert(new BinaryTreeNode(8));
             Console.WriteLine(Tree.Print());
+        }
+
+        [Test]
+        public void MergeTest()
+        {
+            Dictionary<int, Queue<BinaryTreeNode>> d1 = new Dictionary<int, Queue<BinaryTreeNode>>();
         }
 
         #endregion

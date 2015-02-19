@@ -16,7 +16,6 @@ namespace Graphs.BST
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
 
     public class OrderedBinarySearchTree : IBinarySearchTree
     {
@@ -178,17 +177,7 @@ namespace Graphs.BST
         {
             Dictionary<int, Queue<BinaryTreeNode>> nodes = new Dictionary<int, Queue<BinaryTreeNode>>();
             nodes = PrintHelper(nodes, 0, Root);
-            StringBuilder stringbuilder = new StringBuilder();
-            foreach (int depth in nodes.Keys)
-            {
-                stringbuilder.Append("{" + depth + ",[");
-                for (int i = 0; i < nodes[depth].Count; i++)
-                {
-                    stringbuilder.Append(nodes[depth].Dequeue().Key+",");
-                }
-                stringbuilder.Append("]}");
-            }
-            return stringbuilder.ToString();
+            return nodes.Pretty();            
         }
 
         private Dictionary<int, Queue<BinaryTreeNode>> PrintHelper(Dictionary<int, Queue<BinaryTreeNode>> nodes, int depth, BinaryTreeNode node)
