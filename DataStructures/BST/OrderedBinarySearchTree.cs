@@ -13,6 +13,10 @@
 namespace Graphs.BST
 {
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
 
     public class OrderedBinarySearchTree : IBinarySearchTree
     {
@@ -77,6 +81,7 @@ namespace Graphs.BST
                     node.Left = node.Left.Right;
                     return true;
                 }
+
                 return false;
             }
 
@@ -168,5 +173,53 @@ namespace Graphs.BST
                     return DepthHelper(node.Right) + 1;
             return DepthHelper(node.Left) + 1;
         }
+
+        public String Print()
+        {
+            Dictionary<int, Queue<BinaryTreeNode>> nodes = new Dictionary<int, Queue<BinaryTreeNode>>();
+            nodes = PrintHelper(nodes, 0, Root);
+            StringBuilder stringbuilder = new StringBuilder();
+            foreach (int depth in nodes.Keys)
+            {
+                stringbuilder.Append("{" + depth + ",[");
+                for (int i = 0; i < nodes[depth].Count; i++)
+                {
+                    stringbuilder.Append(nodes[depth].Dequeue().Key+",");
+                }
+                stringbuilder.Append("]}");
+            }
+            return stringbuilder.ToString();
+        }
+
+        private Dictionary<int, Queue<BinaryTreeNode>> PrintHelper(Dictionary<int, Queue<BinaryTreeNode>> nodes, int depth, BinaryTreeNode node)
+        {
+            var queue = new Queue<BinaryTreeNode>();
+            if (nodes.ContainsKey(depth))
+            {
+                queue = nodes[depth];
+                queue.Enqueue(node);
+                nodes[depth] = queue;
+            }
+            else
+            {
+                nodes.Add(depth, queue);
+            }
+
+            if (node.HasLeft && node.HasRight)
+            {
+                return PrintHelper(nodes, depth + 1, node.Left).Merge(PrintHelper(nodes, depth + 1, node.Right));
+            }
+
+            if (!node.HasLeft)
+                if (!node.HasRight)
+                {
+                    return nodes;
+                }
+                else
+                    return PrintHelper(nodes, depth + 1, node.Right);
+            return PrintHelper(nodes, depth + 1, node.Left);
+        }
+
+        
     }
 }

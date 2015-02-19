@@ -817,5 +817,37 @@ namespace Tests
         }
 
         #endregion
+
+        #region Print
+
+        [Test]
+        public void PrintTest()
+        {
+            Tree.Insert(new BinaryTreeNode(-20));
+            Tree.Insert(new BinaryTreeNode(20));
+            Tree.Insert(new BinaryTreeNode(-15));
+            Tree.Insert(new BinaryTreeNode(10));
+            Tree.Insert(new BinaryTreeNode(-10));
+            Tree.Insert(new BinaryTreeNode(15));
+            Tree.Insert(new BinaryTreeNode(-12));
+            Tree.Insert(new BinaryTreeNode(12));
+            Tree.Insert(new BinaryTreeNode(-11));
+            Tree.Insert(new BinaryTreeNode(13));
+            Console.WriteLine(Tree.Print());
+        }
+
+        [Test]
+        public void PrintTest2()
+        {
+            Tree.Insert(new BinaryTreeNode(3));
+            Tree.Insert(new BinaryTreeNode(7));
+            Tree.Insert(new BinaryTreeNode(2));
+            Tree.Insert(new BinaryTreeNode(4));
+            Tree.Insert(new BinaryTreeNode(6));
+            Tree.Insert(new BinaryTreeNode(8));
+            Console.WriteLine(Tree.Print());
+        }
+
+        #endregion
     }
 }

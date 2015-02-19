@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="BST\BinaryTreeFormatter.cs" />
     <Compile Include="BST\BinaryTreeNode.cs" />
+    <Compile Include="BST\DictionaryExtensions.cs" />
     <Compile Include="BST\OrderedBinarySearchTree.cs" />
     <Compile Include="BST\IBinarySearchTree.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
