@@ -29,12 +29,12 @@ namespace Graphs.BST
             //             .ToDictionary(group => group.Key, group => group.First());
             foreach (int key in d2.Keys.ToList())
             {
-                var queue = d1.ContainsKey(key)? d1[key] : new Queue<BinaryTreeNode>();
-                for (int i = 0; i < d2[key].Count; i++)
+                var d1Queue = d1.ContainsKey(key) ? d1[key] : new Queue<BinaryTreeNode>();
+                foreach (var n in d2[key].ToList())
                 {
-                    queue.Enqueue(d2[key].Dequeue());
+                    d1Queue.Enqueue(d2[key].Dequeue());
                 }
-                d1[key] = queue;
+                d1[key] = d1Queue;
             }
             return d1;
         }
@@ -45,7 +45,7 @@ namespace Graphs.BST
             foreach (int depth in dict.Keys)
             {
                 stringbuilder.Append("{" + depth + ",[");
-                for (int i = 0; i < dict[depth].Count; i++)
+                foreach (var n in dict[depth].ToList())
                 {
                     stringbuilder.Append(dict[depth].Dequeue().Key + ",");
                 }
